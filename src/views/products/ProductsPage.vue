@@ -3,7 +3,7 @@ import { shallowRef } from 'vue';
 import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
 import UiParentCard from '@/components/shared/UiParentCard.vue';
 import { useCheckoutStore } from '@/stores/checkout';
-import { router } from '../../router';
+import { router } from '@/router';
 
 const checkoutStore = useCheckoutStore();
 const breadcrumbs = shallowRef([

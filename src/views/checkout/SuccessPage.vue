@@ -18,6 +18,8 @@ const breadcrumbs = shallowRef([
     <v-col cols="12">
       <UiParentCard title="Success">
         Success
+
+        <!-- data:image/png;base64, -->
       </UiParentCard>
     </v-col>
   </v-row>

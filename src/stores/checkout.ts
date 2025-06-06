@@ -3,7 +3,10 @@ import { defineStore } from 'pinia';
 export const useCheckoutStore = defineStore({
   id: 'checkout',
   state: () => ({
-    _product: {},
+    _product: {
+      name: 'Laptop',
+      price: 999,
+    },
   }),
   getters: {
     product: (state) => state._product,
@@ -12,5 +15,8 @@ export const useCheckoutStore = defineStore({
     SET_PRODUCT(product: {name: string; price: number}) {
       this._product = product;
     },
+    // SET_PRODUCT(product: {name: string; price: number}) {
+    //   this._product = product;
+    // },
   },
 });

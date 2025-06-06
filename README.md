@@ -19,4 +19,4 @@
 #### `npm run dev`
 
 ### Open application on the browser (if it is not already opened)
-#### `http://localhost:5173`
+#### `http://localhost:5173` or the URL displayed in the terminal
