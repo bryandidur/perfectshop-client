@@ -32,7 +32,7 @@ const breadcrumbs = shallowRef([
     href: '#'
   }
 ]);
-const unknowError = ref(false);
+const unknowError = ref<boolean>(false);
 const formData = reactive({
   billingType: 'CREDIT_CARD',
   name: '',
@@ -50,6 +50,7 @@ const formData = reactive({
   },
 });
 const formErrors = ref<{ [key: string]: string }>({...initialErrors});
+const isBusy = ref<boolean>(false);
 
 function getPageTitle() {
   return `Checkout - ${checkoutStore.product.name} $${checkoutStore.product.price}`;
@@ -64,12 +65,20 @@ function handleResponseError(error: any) {
     Object.keys(errors).forEach((key) => {
       formErrors.value[key] = errors[key][0].replace('.', ' ');
     });
+  } else if (error?.response?.status === 400) {
+    checkoutStore.SET_ERROR(error.response.data.error);
+
+    router.push({
+      name: 'checkout-error',
+    });
   } else {
     unknowError.value = true;
   }
 }
 
 async function handleSubmit() {
+  isBusy.value = true;
+  unknowError.value = false;
   formErrors.value = {...initialErrors};
 
   try {
@@ -79,13 +88,15 @@ async function handleSubmit() {
       value: checkoutStore.product.price,
     });
 
+    checkoutStore.SET_PAYMENT(response.data.data);
+
     router.push({
       name: 'checkout-success',
     });
-
-    console.log({response});
   } catch (error: any) {
     handleResponseError(error);
+  } finally {
+    isBusy.value = false;
   }
 }
 </script>
@@ -206,7 +217,10 @@ async function handleSubmit() {
             </v-col>
           </v-row>
 
-          <v-btn variant="tonal" type="submit">Pay</v-btn>
+          <div>
+            <v-btn variant="tonal" type="submit" :disabled="isBusy">Pay</v-btn>
+            <v-progress-circular v-if="isBusy" class="mx-3" indeterminate></v-progress-circular>
+          </div>
         </v-form>
       </v-sheet>
     </v-card-text>
